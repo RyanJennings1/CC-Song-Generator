@@ -22,26 +22,17 @@ ALPHASIZE = txtutil.ALPHASIZE
 NLAYERS = 3
 INTERNALSIZE = 512
 
-lyrics0 = 'checkpoints/rnn_train_1586612081-0'
-lyrics9 = 'checkpoints/rnn_train_1586614351-900000'
-lyrics18 = 'checkpoints/rnn_train_1586614351-1800000'
-lyrics21 = 'checkpoints/rnn_train_1586614351-2100000'
-lyrics30 = 'checkpoints/rnn_train_1586635708-3000000'
-lyrics42 = 'checkpoints/rnn_train_1586649298-4200000'
-
-# need a better for getting the latests
-author = lyrics42
-
 def main():
   """
   main method
   """
-  ncnt = 0
+  ncnt: int = 0
   with tf.Session() as sess:
     checkpoint_dir: str = './checkpoints'
-    #new_saver = tf.train.import_meta_graph('checkpoints/rnn_train_1586649298-4200000.meta')
-    new_saver = tf.train.import_meta_graph(f'{tf.train.latest_checkpoint(checkpoint_dir)}.meta')
-    new_saver.restore(sess, author)
+    latest_checkpoint: str = tf.train.latest_checkpoint(checkpoint_dir)
+    new_saver = tf.train.import_meta_graph(f'{latest_checkpoint}.meta')
+    #new_saver.restore(sess, author)
+    new_saver.restore(sess, latest_checkpoint)
     x = txtutil.convert_from_alphabet(ord("L"))
     x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
 
