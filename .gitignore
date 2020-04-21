@@ -4,3 +4,6 @@ training_checkpoints/
 .twitter_env
 *.*.swp
 __pycache__
+*.egg-info
+build
+dist
