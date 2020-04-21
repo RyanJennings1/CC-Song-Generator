@@ -1,3 +1,6 @@
 checkpoints/
 log/
 training_checkpoints/
+.twitter_env
+*.*.swp
+__pycache__

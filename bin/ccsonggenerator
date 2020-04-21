@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""
+  name: ccsonggenerator
+  author: Ryan Jennings
+  date: 2020-04-21
+"""
+import argparse
+
+from ccsonggenerator.main import main
+from ccsonggenerator import __version__
+
+if __name__ == "__main__":
+  PARSER = argparse.ArgumentParser()
+  #PARSER.add_argument('--tests-file', '-f', dest='filename')
+  PARSER.add_argument('--version', '-v', action='store_true', help='Print version')
+  ARGS = PARSER.parse_args()
+
+  if ARGS.version:
+    print(f'Version: {__version__}')
+  else:
+    main()
