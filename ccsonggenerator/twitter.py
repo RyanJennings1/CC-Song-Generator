@@ -1,43 +1,37 @@
 #!/usr/bin/env python
 """
   name: twitter.py
+  author: Ryan Jennings
+  date: 2020-04-21
 """
-import os
-
-from typing import Tuple
+from typing import Any
 
 import tweepy
 
-def load_env_vars() -> Tuple[str, str, str, str]:
+class Twitter():
   """
-  Return twitter credentials from environment
+  Twitter API interface class
+  """
+  def __init__(self, consumer_key, consumer_secret, access_token, access_token_secret):
+    """
+    initialise values
+    """
+    self.consumer_key = consumer_key
+    self.consumer_secret = consumer_secret
+    self.access_token = access_token
+    self.access_token_secret = access_token_secret
+    auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
+    auth.set_access_token(self.access_token, self.access_token_secret)
+    self.connection = tweepy.API(auth)
 
-  return: Tuple[str, str, str, str]
-  """
-  consumer_key = os.environ.get('twitter_api_key')
-  consumer_key_secret = os.environ.get('twitter_api_key_secret')
-  access_token = os.environ.get('twitter_access_token')
-  access_token_secret = os.environ.get('twitter_access_token_secret')
-  if not consumer_key or not consumer_key_secret or not access_token or not access_token_secret:
-    raise Exception('Invalid api keys')
-  return consumer_key, consumer_key_secret, access_token, access_token_secret
+  def get_connection(self) -> Any:
+    """
+    return the connection object - type tweepy.API
+    """
+    return self.connection
 
-def post_tweet(api, text):
-  """
-  post a tweet
-  """
-  api.update_status(text)
-
-def main():
-  """
-  main method
-  """
-  consumer_key, consumer_secret, access_token, access_token_secret = load_env_vars()
-  auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-  auth.set_access_token(access_token, access_token_secret)
-  api = tweepy.API(auth)
-
-  post_tweet(api, 'test')
-
-if __name__ == '__main__':
-  main()
+  def tweet_generated_text(self, text) -> None:
+    """
+    Publish a tweet of text
+    """
+    self.connection.update_status(text)

@@ -11,11 +11,12 @@ from ccsonggenerator import __version__
 
 if __name__ == "__main__":
   PARSER = argparse.ArgumentParser()
-  #PARSER.add_argument('--tests-file', '-f', dest='filename')
+  PARSER.add_argument('--train', '-t', action='store_true', help='Train the model on lyrics data')
+  PARSER.add_argument('--run', '-r', action='store_true', help='Run the model to generate an output')
   PARSER.add_argument('--version', '-v', action='store_true', help='Print version')
   ARGS = PARSER.parse_args()
 
   if ARGS.version:
     print(f'Version: {__version__}')
   else:
-    main()
+    main(ARGS)

@@ -35,6 +35,7 @@ class SongGenerator():
     self.nlayers: int = 3
     self.message_length: int = 140
     self.checkpoint_dir: str = './checkpoints'
+    self.output_filename = 'generated_output.txt'
 
   def train(self) -> None:
     """
@@ -206,7 +207,7 @@ class SongGenerator():
       # [ BATCHSIZE, INTERNALSIZE * NLAYERS]
       h = np.zeros([1, self.internal_size * self.nlayers], dtype=np.float32)
 
-      output_file = open("generated_output.txt", "w")
+      output_file = open(self.output_filename, "w")
       for _ in range(self.message_length):
         yo, h = sess.run(['Yo:0', 'H:0'],
                          feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})
@@ -234,3 +235,9 @@ class SongGenerator():
           output_file.write("")
           ncnt = 0
       output_file.close()
+
+  def get_output_filename(self):
+    """
+    Return the output file's name
+    """
+    return self.output_filename
