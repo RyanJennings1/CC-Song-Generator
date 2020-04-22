@@ -17,6 +17,13 @@ import numpy as np
 import glob
 import sys
 
+# Added by Ryan 2020-04-21
+import nltk
+from nltk.tokenize import word_tokenize
+import enchant
+Hiberno_English_Dictionary = enchant.Dict('en_IE')
+nltk.download('punkt')
+
 # size of the alphabet that we work with
 ALPHASIZE = 98
 
@@ -331,3 +338,24 @@ def frequency_limiter(n, multiple=1, modulo=0):
     def limit(i):
         return i % (multiple * n) == modulo*multiple
     return limit
+
+####################################################################
+# Additional methods added by Ryan on top of Apache Licensed Code
+####################################################################
+def valid_english_word(word: str) -> bool:
+    """
+    Return whether the supplied word is a valid word in the
+    Hiberno-English lexicon
+    """
+    return Hiberno_English_Dictionary.check(word)
+
+def paragraph_validity(paragraph: str) -> float:
+    """
+    Return the percentage of valid words in a song lyric paragraph
+    """
+    num_valid: int = 0
+    split_paragraph: List[str] = word_tokenize(paragraph)
+    for word in split_paragraph:
+        if Hiberno_English_Dictionary.check(word):
+            num_valid += 1
+    return num_valid/len(split_paragraph) if num_valid != 0 else 0

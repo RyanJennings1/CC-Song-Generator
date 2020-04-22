@@ -6,6 +6,7 @@
 """
 import math
 import os
+import random
 import time
 
 import numpy as np
@@ -33,7 +34,7 @@ class SongGenerator():
     self.alpha_size: str = txt.ALPHASIZE
     self.internal_size: int = 512
     self.nlayers: int = 3
-    self.message_length: int = 140
+    self.message_length: int = 160
     self.checkpoint_dir: str = './checkpoints'
     self.output_filename = 'generated_output.txt'
 
@@ -190,16 +191,19 @@ class SongGenerator():
       istate = ostate
       step += self.batch_size * self.seqlen
 
-  def generate(self):
+  def generate(self) -> str:
     """
     Generate new text
     """
+    alphabet: str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    generated_text: str = ""
     ncnt: int = 0
     with tf.Session() as sess:
       latest_checkpoint: str = tf.train.latest_checkpoint(self.checkpoint_dir)
       new_saver = tf.train.import_meta_graph(f'{latest_checkpoint}.meta')
       new_saver.restore(sess, latest_checkpoint)
-      x = txt.convert_from_alphabet(ord("L"))
+      #x = txt.convert_from_alphabet(ord("L"))
+      x = txt.convert_from_alphabet(ord(alphabet[random.randint(0, 25)]))
       x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
 
       # initial values
@@ -208,6 +212,11 @@ class SongGenerator():
       h = np.zeros([1, self.internal_size * self.nlayers], dtype=np.float32)
 
       output_file = open(self.output_filename, "w")
+
+      initial_char = chr(txt.convert_to_alphabet(x))
+      output_file.write(initial_char)
+      generated_text += initial_char
+      print(initial_char, end="")
       for _ in range(self.message_length):
         yo, h = sess.run(['Yo:0', 'H:0'],
                          feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})
@@ -225,6 +234,7 @@ class SongGenerator():
         next_char = chr(txt.convert_to_alphabet(next_char))
         print(next_char, end="")
         output_file.write(next_char)
+        generated_text += next_char
 
         if next_char == '\n':
           ncnt = 0
@@ -233,8 +243,10 @@ class SongGenerator():
         if ncnt == 100:
           print("")
           output_file.write("")
+          generated_text += ""
           ncnt = 0
       output_file.close()
+    return generated_text
 
   def get_output_filename(self):
     """

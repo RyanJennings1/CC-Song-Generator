@@ -34,7 +34,9 @@ setup(
   ],
   install_requires=[
     'tensorflow==1.13.1',
-    'tweepy'
+    'tweepy',
+    'pyenchant',
+    'nltk'
   ],
   classifiers=[
     'Development Status :: 1 - Alpha',
