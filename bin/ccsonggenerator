@@ -13,6 +13,7 @@ if __name__ == "__main__":
   PARSER = argparse.ArgumentParser()
   PARSER.add_argument('--train', '-t', action='store_true', help='Train the model on lyrics data')
   PARSER.add_argument('--run', '-r', action='store_true', help='Run the model to generate an output')
+  PARSER.add_argument('--analyse', '-a', action='store_true', help='Analyse existing tweets published')
   PARSER.add_argument('--version', '-v', action='store_true', help='Print version')
   ARGS = PARSER.parse_args()
 

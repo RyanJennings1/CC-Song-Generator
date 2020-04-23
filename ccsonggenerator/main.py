@@ -16,23 +16,30 @@ from ccsonggenerator.twitter import Twitter
 def main(args: Dict[str, bool]) -> None:
   """
   main method
+
+  To do:
+  - More validation?
+  - Get to run on computer every hour
+  - Flesh out Readme more
   """
   song_generator = SongGenerator()
+  consumer_key, consumer_secret, access_token, access_token_secret = load_env_vars()
+  twitter_api = Twitter(consumer_key,
+                        consumer_secret,
+                        access_token,
+                        access_token_secret)
+
   if args.train:
     song_generator.train()
-  elif args.run:
+  if args.run:
     # Generate multiple and pick most logical
     paragraph = best_generated_paragraph(10, song_generator)
     print("\n\n\n\n")
     print(paragraph)
-    """
-    consumer_key, consumer_secret, access_token, access_token_secret = load_env_vars()
-    twitter_api = Twitter(consumer_key,
-                          consumer_secret,
-                          access_token,
-                          access_token_secret)
-    twitter_api.tweet_generated_text(song_generator.get_output_filename())
-    """
+    #twitter_api.tweet_generated_text(song_generator.get_output_filename())
+  if args.analyse:
+    # pull down tweet data
+    twitter_api.retrieve_existing_tweet_data(write_to_file=True)
 
 def load_env_vars() -> Tuple[str, str, str, str]:
   """
