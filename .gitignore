@@ -8,3 +8,4 @@ __pycache__
 build
 dist
 tweet_statistics.csv
+generated_output.txt
