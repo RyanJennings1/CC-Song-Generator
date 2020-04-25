@@ -36,7 +36,7 @@ def main(args: Dict[str, bool]) -> None:
     paragraph = best_generated_paragraph(10, song_generator)
     print("\n\n\n\n")
     print(paragraph)
-    #twitter_api.tweet_generated_text(song_generator.get_output_filename())
+    twitter_api.tweet_generated_text(paragraph)
   if args.analyse:
     # pull down tweet data
     twitter_api.retrieve_existing_tweet_data(write_to_file=True)

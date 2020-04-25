@@ -10,7 +10,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 PACKAGES = find_packages(HERE)
 
-with open(os.path.join(HERE, 'Readme.md')) as readme_file:
+with open(os.path.join(HERE, 'README.md')) as readme_file:
   README = readme_file.read()
 
 with open(os.path.join(HERE, 'ccsonggenerator', '__init__.py')) as init_file:
