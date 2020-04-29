@@ -25,6 +25,7 @@ class Twitter():
     auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
     auth.set_access_token(self.access_token, self.access_token_secret)
     self.connection = tweepy.API(auth)
+    self.user_id = self.connection.me().id
 
   def get_connection(self) -> Any:
     """
@@ -43,9 +44,10 @@ class Twitter():
     Retrieve the data on the existing tweets
     """
     tweet_data: List[Dict[str, Any]] = []
-    responses = self.connection.home_timeline(count=20)
+    responses = self.connection.user_timeline(id=self.user_id, count=24)
+    popularity_threshold: int = round((self.connection.me().followers_count/100) * 25)
     for tweet in responses:
-      if tweet.favorite_count > 10 or tweet.retweet_count > 10:
+      if tweet.favorite_count > popularity_threshold or tweet.retweet_count > popularity_threshold:
         with open(f'lyrics/popular_tweet_{tweet.id}.txt', 'w') as p_tweet_file:
           p_tweet_file.write(tweet.text)
       if tweet.favorite_count > 0 or tweet.retweet_count > 0:
