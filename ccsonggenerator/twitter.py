@@ -43,8 +43,11 @@ class Twitter():
     Retrieve the data on the existing tweets
     """
     tweet_data: List[Dict[str, Any]] = []
-    responses = self.connection.home_timeline()
+    responses = self.connection.home_timeline(count=20)
     for tweet in responses:
+      if tweet.favorite_count > 10 or tweet.retweet_count > 10:
+        with open(f'lyrics/popular_tweet_{tweet.id}.txt', 'w') as p_tweet_file:
+          p_tweet_file.write(tweet.text)
       if tweet.favorite_count > 0 or tweet.retweet_count > 0:
         tweet_data.append({
           'id': tweet.id,
