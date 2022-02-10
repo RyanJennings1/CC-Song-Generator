@@ -33,7 +33,7 @@ setup(
     'bin/ccsonggenerator',
   ],
   install_requires=[
-    'tensorflow==2.5.0',
+    'tensorflow==2.5.3',
     'tweepy',
     'pyenchant',
     'nltk'
